@@ -323,7 +323,7 @@ upstream:
 
       catalog:
         rules:
-          - allow: [Component, System, API, Resource, Location, Template]
+          - allow: [Domain, Component, System, API, Resource, Location, Template]
         locations:
 {% for location in ocp4_workload_trusted_application_pipeline_gitlab_template_locations %}
           - target: https://{{ ocp4_workload_trusted_application_pipeline_gitlab_host }}/{{ location.group }}/{{ location.project }}/blob/{{ location.branch }}/{{ location.file }}

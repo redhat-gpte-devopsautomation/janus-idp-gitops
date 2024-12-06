@@ -303,7 +303,7 @@ upstream:
 
       catalog:
         rules:
-          - allow: [Component, System, API, Resource, Location, Template]
+          - allow: [Domain, Component, System, API, Resource, Location, Template]
         locations:
 {% for location in ocp4_workload_redhat_developer_hub_gitlab_template_locations %}
           - target: https://{{ ocp4_workload_redhat_developer_hub_gitlab_host }}/{{ location.group }}/{{ location.project }}/blob/{{ location.branch }}/{{ location.file }}
