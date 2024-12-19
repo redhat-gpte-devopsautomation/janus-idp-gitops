@@ -241,7 +241,7 @@ upstream:
           script-src: ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
           script-src-elem: ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
 {% endif %}
-          img-src: ["'self'", 'data:', 'https://api.dicebear.com', 'https://secure.gravatar.com/']
+          img-src: ["'self'", 'data:', 'https://api.dicebear.com', 'https://secure.gravatar.com']
           connect-src: ["'self'", 'http:', 'https:', 'data:']
         cors:
           origin: https://{{ ocp4_workload_trusted_application_pipeline_backstage_host }}
