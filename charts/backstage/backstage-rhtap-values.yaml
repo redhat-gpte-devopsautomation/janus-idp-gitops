@@ -259,6 +259,7 @@ upstream:
             target: https://{{ ocp4_workload_trusted_application_pipeline_gitlab_host }}/
             pathRewrite:
               '^/api/proxy/developer-hub/tech-radar': /gitops/janus-idp-gitops/-/raw/main/config/tech-radar.json
+              '^/api/proxy/developer-hub/learning-paths': '/rhdh/learning-paths/-/raw/main/data.json'
             changeOrigin: true
             secure: false
 
