@@ -196,8 +196,8 @@ upstream:
       integrations:
         gitlab:
         - host: gitlab-gitlab.apps.cluster-l9qz2.dynamic2.redhatworkshops.io
-          baseUrl: http://gitlab.gitlab.svc.cluster.local
-          apiBaseUrl: http://gitlab.gitlab.svc.cluster.local/api/v4
+          baseUrl: https://gitlab-gitlab.apps.cluster-l9qz2.dynamic2.redhatworkshops.io
+          apiBaseUrl: https://gitlab-gitlab.apps.cluster-l9qz2.dynamic2.redhatworkshops.io/api/v4
           token: ${GITLAB_TOKEN}
 
       proxy:
@@ -212,7 +212,7 @@ upstream:
             # Change to "false" in case of using self hosted quay instance with a self-signed certificate
             secure: false
           '/developer-hub':
-            target: http://gitlab.gitlab.svc.cluster.local/
+            target: https://gitlab-gitlab.apps.cluster-l9qz2.dynamic2.redhatworkshops.io/
             pathRewrite:
               '^/api/proxy/developer-hub/tech-radar': /gitops/janus-idp-gitops/-/raw/main/config/tech-radar.json
               '^/api/proxy/developer-hub/learning-paths': '/rhdh/learning-paths/-/raw/main/data.json'
@@ -237,7 +237,7 @@ upstream:
             production:
               clientId: ${GITLAB_CLIENT_ID}
               clientSecret: ${GITLAB_CLIENT_SECRET}
-              audience: http://gitlab.gitlab.svc.cluster.local
+              audience: https://gitlab-gitlab.apps.cluster-l9qz2.dynamic2.redhatworkshops.io
               callbackUrl: https://backstage-backstage.apps.cluster-l9qz2.dynamic2.redhatworkshops.io/api/auth/gitlab/handler/frame
               signIn:
                 resolvers:
