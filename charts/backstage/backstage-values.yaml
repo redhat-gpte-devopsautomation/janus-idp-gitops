@@ -2,54 +2,20 @@
 #helm repo update
 #oc project backstage
 #helm install backstage backstage/backstage --values values.yaml
-{% if ocp4_workload_redhat_developer_hub_orchestrator_enabled is defined %}
-    {% set orchestrator_enabled = ocp4_workload_redhat_developer_hub_orchestrator_enabled %}
-{% else %}
-    {% set orchestrator_enabled = true %}
-{% endif %}
-
 global:
   auth:
     backend:
       enabled: true
-  clusterRouterBase: {{ ocp4_workload_redhat_developer_hub_apps_domain }}
+  clusterRouterBase: apps.cluster-l9qz2.dynamic2.redhatworkshops.io
   dynamic:
     includes:
       - dynamic-plugins.default.yaml
     plugins:
-      - package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-security-insights
-        disabled: false
-      - package: ./dynamic-plugins/dist/immobiliarelabs-backstage-plugin-gitlab-backend-dynamic
-        disabled: false
-      - package: ./dynamic-plugins/dist/immobiliarelabs-backstage-plugin-gitlab
-        disabled: false
-      - package: ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-gitlab-dynamic
-        disabled: false
-      - package: ./dynamic-plugins/dist/backstage-plugin-scaffolder-backend-module-gitlab-dynamic
-        disabled: false
-      - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic
-        disabled: false
-      - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes
-        disabled: false
-      - package: ./dynamic-plugins/dist/backstage-community-plugin-topology
-        disabled: false
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-community-plugin-redhat-argocd
       - package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd-backend-dynamic
         disabled: false
       - package: ./dynamic-plugins/dist/roadiehq-scaffolder-backend-argocd-dynamic
-        disabled: false
-      - package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd
-        disabled: true
-      - package: ./dynamic-plugins/dist/backstage-community-plugin-ocm
-        disabled: false
-      - package: ./dynamic-plugins/dist/backstage-community-plugin-ocm-backend-dynamic
-        disabled: false
-      - package: ./dynamic-plugins/dist/roadiehq-scaffolder-backend-module-utils-dynamic
-        disabled: false
-      - package: ./dynamic-plugins/dist/backstage-community-plugin-catalog-backend-module-keycloak-dynamic
-        disabled: false
-      - package: ./dynamic-plugins/dist/backstage-plugin-techdocs-backend-dynamic
-        disabled: false
-      - package: ./dynamic-plugins/dist/backstage-plugin-techdocs
         disabled: false
       - package: ./dynamic-plugins/dist/backstage-community-plugin-tekton
         pluginConfig:
@@ -67,74 +33,87 @@ global:
                         allOf:
                           - isTektonCIAvailable
         disabled: false
+      - package: ./dynamic-plugins/dist/immobiliarelabs-backstage-plugin-gitlab-backend-dynamic
+        disabled: false
+      - package: ./dynamic-plugins/dist/immobiliarelabs-backstage-plugin-gitlab
+        disabled: false
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-scaffolder-backend-module-gitlab-dynamic
       - package: ./dynamic-plugins/dist/backstage-community-plugin-quay
         disabled: false
-      - package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar
+      - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic
         disabled: false
-      - package:  ./dynamic-plugins/dist/backstage-community-plugin-redhat-argocd
+      - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes
         disabled: false
-
-{% if orchestrator_enabled %}
       - disabled: false
-        package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.4.0"
-        integrity: sha512-2aOHDLFrGMAtyHFiyGZwVBZ9Op+TmKYUwfZxwoaGJ1s6JSy/0qgqineEEE0K3dn/f17XBUj+H1dwa5Al598Ugw==
+        package: ./dynamic-plugins/dist/backstage-community-plugin-topology
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-techdocs
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-techdocs-backend-dynamic
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-community-plugin-catalog-backend-module-keycloak-dynamic
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-community-plugin-ocm
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-community-plugin-ocm-backend-dynamic
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-community-plugin-tech-radar
+      - disabled: false
+        package: '@redhat/backstage-plugin-orchestrator-backend-dynamic@1.8.12'
         pluginConfig:
           orchestrator:
             dataIndexService:
-              url: http://sonataflow-platform-data-index-service.sonataflow-infra
+              url: http://sonataflow-platform-data-index-service
       - disabled: false
-        package: "@redhat/backstage-plugin-orchestrator@1.4.0"
-        integrity: sha512-2yasbfBZ3iKntArIfK+hk9tvv4b/dy9+WKXOcWIotqkI1gv+Nhvy+m55KAUWi2vmfM0rj3EoG6YP+3Zajn1KyA==
+        package: '@redhat/backstage-plugin-orchestrator@1.8.12'
         pluginConfig:
           dynamicPlugins:
             frontend:
               red-hat-developer-hub.backstage-plugin-orchestrator:
                 appIcons:
-                  - importName: OrchestratorIcon
-                    module: OrchestratorPlugin
-                    name: orchestratorIcon
+                - importName: OrchestratorIcon
+                  name: orchestratorIcon
                 dynamicRoutes:
-                  - importName: OrchestratorPage
-                    menuItem:
-                      icon: orchestratorIcon
-                      text: Orchestrator
-                    module: OrchestratorPlugin
-                    path: /orchestrator
+                - importName: OrchestratorPage
+                  menuItem:
+                    icon: orchestratorIcon
+                    text: Orchestrator
+                  path: /orchestrator
       - disabled: false
-        package: "./dynamic-plugins/dist/backstage-plugin-notifications"
+        package: '@redhat/backstage-plugin-scaffolder-backend-module-orchestrator-dynamic@1.8.12'
+        pluginConfig:
+          orchestrator:
+            dataIndexService:
+              url: http://sonataflow-platform-data-index-service
       - disabled: false
-        package: "./dynamic-plugins/dist/backstage-plugin-signals"
+        package: '@redhat/backstage-plugin-orchestrator-form-widgets@1.8.12'
+        pluginConfig:
+          dynamicPlugins:
+            frontend:
+              red-hat-developer-hub.backstage-plugin-orchestrator-form-widgets: {}
       - disabled: false
-        package: "./dynamic-plugins/dist/backstage-plugin-notifications-backend-dynamic"
+        package: ./dynamic-plugins/dist/backstage-plugin-notifications
       - disabled: false
-        package: "./dynamic-plugins/dist/backstage-plugin-signals-backend-dynamic"
-
-{% endif %}
+        package: ./dynamic-plugins/dist/backstage-plugin-signals
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-notifications-backend-dynamic
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-signals-backend-dynamic
 
 upstream:
   backstage:
     image:
-      registry: {{ ocp4_workload_redhat_developer_hub_backstage_image_registry }}
-      repository: {{ ocp4_workload_redhat_developer_hub_backstage_image_repository }}
-      tag: '{{ ocp4_workload_redhat_developer_hub_backstage_image_tag }}'
+      registry: quay.io
+      repository: rhdh/rhdh-hub-rhel9
+      tag: '1.8-218'
       pullSecrets:
       - redhat-gpte-devhub-pull-secret
     extraEnvVars:
       - name: NODE_OPTIONS
         value: --no-node-snapshot
       - name: BACKEND_SECRET
-        value: "{{ '{{ randAlphaNum 24 | b64enc }}' }}"
-      - name: ORCHESTRATOR_TOKEN
-        valueFrom:
-          secretKeyRef:
-            key: orchestrator-token
-            name: backstage-orchestrator-token
-      - name: 'APP_CONFIG_app_baseUrl'
-        value: 'https://{{ ocp4_workload_redhat_developer_hub_backstage_host }}'
-      - name: 'APP_CONFIG_backend_baseUrl'
-        value: 'https://{{ ocp4_workload_redhat_developer_hub_backstage_host }}'
-      - name: 'APP_CONFIG_backend_cors_origin'
-        value: 'https://{{ ocp4_workload_redhat_developer_hub_backstage_host }}'
+        value: "{{ randAlphaNum 24 | b64enc }}"
       - name: POSTGRES_ADMIN_PASSWORD
         valueFrom:
           secretKeyRef:
@@ -142,142 +121,134 @@ upstream:
             name: backstage-postgresql
       - name: NODE_TLS_REJECT_UNAUTHORIZED
         value: "0"
-      - name: APP_CONFIG_catalog_providers_keycloakOrg_default_baseUrl
-        value: https://{{ ocp4_workload_redhat_developer_hub_keycloak_host }}/auth
-      - name: APP_CONFIG_catalog_providers_keycloakOrg_default_loginRealm
-        value: backstage
-      - name: APP_CONFIG_catalog_providers_keycloakOrg_default_realm
-        value: backstage
-      - name: APP_CONFIG_catalog_providers_keycloakOrg_default_clientId
+      - name: KEYCLOAK_CLIENT_ID
         valueFrom:
           secretKeyRef:
             key: CLIENT_ID
             name: keycloak-client-secret-backstage
-      - name: APP_CONFIG_catalog_providers_keycloakOrg_default_clientSecret
+      - name: KEYCLOAK_CLIENT_SECRET
         valueFrom:
           secretKeyRef:
             key: CLIENT_SECRET
             name: keycloak-client-secret-backstage
       - name: LOG_LEVEL
         value: debug
-    extraContainers:
-      - name: oauth2-proxy
-        env:
-          - name: OAUTH2_PROXY_CLIENT_ID
-            valueFrom:
-              secretKeyRef:
-                key: CLIENT_ID
-                name: keycloak-client-secret-backstage
-          - name: OAUTH2_PROXY_CLIENT_SECRET
-            valueFrom:
-              secretKeyRef:
-                key: CLIENT_SECRET
-                name: keycloak-client-secret-backstage
-          - name: OAUTH2_PROXY_COOKIE_SECRET
-            value: "{{ '{{ randAlpha 32 | lower | b64enc }}' }}"
-          - name: OAUTH2_PROXY_OIDC_ISSUER_URL
-            value: https://{{ ocp4_workload_redhat_developer_hub_keycloak_host }}/auth/realms/backstage
-          - name: OAUTH2_PROXY_SSL_INSECURE_SKIP_VERIFY
-            value: 'true'
-        ports:
-          - name: oauth2-proxy
-            containerPort: 4180
-            protocol: TCP
-        imagePullPolicy: IfNotPresent
-        image: 'quay.io/oauth2-proxy/oauth2-proxy:latest'
-        args:
-          - '--provider=oidc'
-          - '--email-domain=*'
-          - '--upstream=http://localhost:7007'
-          - '--http-address=0.0.0.0:4180'
-          - '--skip-provider-button'
-          - '--insecure-oidc-allow-unverified-email=true'
+      - name: GITLAB_CLIENT_ID
+        valueFrom:
+          secretKeyRef:
+            key: CLIENT_ID
+            name: gitlab-client-secret
+      - name: GITLAB_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            key: CLIENT_SECRET
+            name: gitlab-client-secret
+      - name: GITLAB_TOKEN
+        valueFrom:
+          secretKeyRef:
+            key: TOKEN
+            name: gitlab-integration-secret
+      - name: QUAY_TOKEN
+        valueFrom:
+          secretKeyRef:
+            key: TOKEN
+            name: quay-integration-secret
+      - name: ARGOCD_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: PASSWORD
+            name: argocd-integration-secret
+      - name: K8S_SA_TOKEN
+        valueFrom:
+          secretKeyRef:
+            key: TOKEN
+            name: kubernetes-sa-secret
 
     appConfig:
+      app:
+        baseUrl: https://backstage-backstage.apps.cluster-l9qz2.dynamic2.redhatworkshops.io
       backend:
-{% if orchestrator_enabled %}
-        auth:
-          externalAccess:
-            - type: static
-              options:
-                token: ${ORCHESTRATOR_TOKEN}
-                subject: orchestrator
-{% endif %}
+        baseUrl: https://backstage-backstage.apps.cluster-l9qz2.dynamic2.redhatworkshops.io
         listen:
           port: 7007
           host: 0.0.0.0
         csp:
-{% if orchestrator_enabled %}
           script-src: ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
           script-src-elem: ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
           img-src: ["'self'", 'data:']
-{% endif %}
           connect-src: ["'self'", 'http:', 'https:', 'data:']
         cors:
-          origin: https://{{ ocp4_workload_redhat_developer_hub_backstage_host }}
+          origin: https://backstage-backstage.apps.cluster-l9qz2.dynamic2.redhatworkshops.io
           methods: [GET, POST, PUT, DELETE]
           credentials: true
         database:
           client: pg
           connection:
+            database: postgres
             host: "${POSTGRES_HOST}"
             port: "${POSTGRES_PORT}"
-            user: "${POSTGRES_USER}"
+            user: postgres
             password: "${POSTGRES_ADMIN_PASSWORD}"
         reading:
           allow:
-            - host: '*.{{ ocp4_workload_redhat_developer_hub_apps_domain }}'
+            - host: '*.apps.cluster-l9qz2.dynamic2.redhatworkshops.io'
 
       integrations:
         gitlab:
-        - host: {{ ocp4_workload_redhat_developer_hub_gitlab_host }}
-          baseUrl: https://{{ ocp4_workload_redhat_developer_hub_gitlab_host }}
-          apiBaseUrl: https://{{ ocp4_workload_redhat_developer_hub_gitlab_host }}/api/v4
-          token: {{ ocp4_workload_redhat_developer_hub_gitlab_root_token }}
+        - host: gitlab-gitlab.apps.cluster-l9qz2.dynamic2.redhatworkshops.io
+          baseUrl: https://gitlab-gitlab.apps.cluster-l9qz2.dynamic2.redhatworkshops.io
+          apiBaseUrl: https://gitlab-gitlab.apps.cluster-l9qz2.dynamic2.redhatworkshops.io/api/v4
+          token: ${GITLAB_TOKEN}
 
       proxy:
         endpoints:
           '/quay/api':
-            target: 'https://{{ ocp4_workload_redhat_developer_hub_quay_host }}'
+            target: 'https://quay-l9qz2-1.apps.cluster-l9qz2.dynamic2.redhatworkshops.io'
             headers:
               X-Requested-With: 'XMLHttpRequest'
               # Uncomment the following line to access a private Quay Repository using a token
-              Authorization: 'Bearer {{ ocp4_workload_redhat_developer_hub_quay_admin_token }}'
+              Authorization: 'Bearer ${QUAY_TOKEN}'
             changeOrigin: true
             # Change to "false" in case of using self hosted quay instance with a self-signed certificate
             secure: false
           '/developer-hub':
-            target: https://{{ ocp4_workload_redhat_developer_hub_gitlab_host }}/
+            target: https://gitlab-gitlab.apps.cluster-l9qz2.dynamic2.redhatworkshops.io/
             pathRewrite:
               '^/api/proxy/developer-hub/tech-radar': /gitops/janus-idp-gitops/-/raw/main/config/tech-radar.json
+              '^/api/proxy/developer-hub/learning-paths': '/rhdh/learning-paths/-/raw/main/data.json'
             changeOrigin: true
             secure: false
 
       quay:
         # The UI url for Quay, used to generate the link to Quay
-        uiUrl: 'https://{{ ocp4_workload_redhat_developer_hub_quay_host }}'
+        uiUrl: 'https://quay-l9qz2-1.apps.cluster-l9qz2.dynamic2.redhatworkshops.io'
 
       techdocs:
-        builder: 'external'
+        builder: local
         generator:
-          runIn: 'local'
+          runIn: local
         publisher:
-          type: 'awsS3'
-          awsS3:
-            bucketName: {{ ocp4_workload_redhat_developer_hub_minio_bucket_name }}
-            region: us-east-2
-            endpoint: {{ ocp4_workload_redhat_developer_hub_minio_endpoint }}
-            s3ForcePathStyle: true
-            credentials:
-              accessKeyId: {{ ocp4_workload_redhat_developer_hub_minio_username }}
-              secretAccessKey: {{ ocp4_workload_redhat_developer_hub_minio_password }}
+          type: local
 
       auth:
         environment: production
         providers:
-          oauth2Proxy: {}
+          gitlab:
+            production:
+              clientId: ${GITLAB_CLIENT_ID}
+              clientSecret: ${GITLAB_CLIENT_SECRET}
+              audience: https://gitlab-gitlab.apps.cluster-l9qz2.dynamic2.redhatworkshops.io
+              callbackUrl: https://backstage-backstage.apps.cluster-l9qz2.dynamic2.redhatworkshops.io/api/auth/gitlab/handler/frame
+              signIn:
+                resolvers:
+                  - resolver: emailMatchingUserEntityProfileEmail
+                  - resolver: emailLocalPartMatchingUserEntityName
+                  - resolver: usernameMatchingUserEntityName
+        session:
+          secret:
+            $env: 'BACKEND_SECRET'
 
-      signInPage: oauth2Proxy
+      signInPage: gitlab
 
       scaffolder:
         # see https://backstage.io/docs/features/software-templates/configuration for software template options
@@ -286,16 +257,26 @@ upstream:
         rules:
           - allow: [Domain, Component, System, API, Resource, Location, Template]
         locations:
-{% for location in ocp4_workload_redhat_developer_hub_gitlab_template_locations %}
-          - target: https://{{ ocp4_workload_redhat_developer_hub_gitlab_host }}/{{ location.group }}/{{ location.project }}/blob/{{ location.branch }}/{{ location.file }}
+          - target: https://gitlab-gitlab.apps.cluster-l9qz2.dynamic2.redhatworkshops.io/rhdh/developer-hub-software-templates/blob/main/showcase-templates.yaml
             type: url
             rules:
-              - allow: [{{ location.rules.allow }}]
-{% endfor %}
+              - allow: [Template]
+          - target: https://gitlab-gitlab.apps.cluster-l9qz2.dynamic2.redhatworkshops.io/rhdh/developer-hub-software-templates/blob/main/org.yaml
+            type: url
+            rules:
+              - allow: [Group, User]
+          - target: https://gitlab-gitlab.apps.cluster-l9qz2.dynamic2.redhatworkshops.io/summit-lab/backstage-workshop/blob/master/showcase-templates.yaml
+            type: url
+            rules:
+              - allow: [Template]
+          - target: https://gitlab-gitlab.apps.cluster-l9qz2.dynamic2.redhatworkshops.io/rhdh-entities/rhdh-demo-entities/blob/main/locations.yaml
+            type: url
+            rules:
+              - allow: [Domain, Component, System, API, Resource, Location]
         providers:
           gitlab:
             selfHosted:
-              host: {{ ocp4_workload_redhat_developer_hub_gitlab_host }}
+              host: gitlab-gitlab.apps.cluster-l9qz2.dynamic2.redhatworkshops.io
               schedule: # optional; same options as in TaskScheduleDefinition
                 # supports cron, ISO duration, "human duration" as used in code
                 frequency: { seconds: 10 }
@@ -311,15 +292,22 @@ upstream:
                 # supports ISO duration, "human duration" as used in code
                 timeout: { seconds: 60 }
               owner: group:rhdh
+          keycloakOrg:
+            default:
+              baseUrl: keycloak-rhsso.apps.cluster-l9qz2.dynamic2.redhatworkshops.io/auth
+              loginRealm: backstage
+              realm: backstage
+              clientId: ${KEYCLOAK_CLIENT_ID}
+              clientSecret: ${KEYCLOAK_CLIENT_SECRET}
 
       argocd:
         appLocatorMethods:
           - type: 'config'
             instances:
               - name: main
-                url: 	https://{{ ocp4_workload_redhat_developer_hub_argocd_host }}
+                url: 	https://argocd-server-janus-argocd.apps.cluster-l9qz2.dynamic2.redhatworkshops.io
                 username: admin
-                password: {{ ocp4_workload_redhat_developer_hub_argocd_password }}
+                password: ${ARGOCD_PASSWORD}
 
       kubernetes:
         serviceLocatorMethod:
@@ -328,10 +316,10 @@ upstream:
           - type: "config"
             clusters:
               - name: dev-cluster-infra
-                url: {{ ocp4_workload_redhat_developer_hub_ocp_api }}
+                url: https://api.cluster-l9qz2.dynamic2.redhatworkshops.io:6443
                 authProvider: "serviceAccount"
                 skipTLSVerify: true
-                serviceAccountToken: {{ ocp4_workload_redhat_developer_hub_ocp_default_sa_token }}
+                serviceAccountToken: ${K8S_SA_TOKEN}
         customResources:
           - group: 'tekton.dev'
             apiVersion: 'v1beta1'
@@ -360,43 +348,59 @@ upstream:
         permission: false
 
   postgresql:
-    enabled: true
-    database: backstage
-    postgresqlDataDir: /var/lib/pgsql/data/userdata
     auth:
-      username: postgres
-      database: backstage
-      existingSecret: backstage-postgresql
-      secretKeys:
-        userPasswordKey: postgres-password
-    image:
-      registry: registry.redhat.io
-      repository: rhel9/postgresql-13
-      tag: 1-73
-    primary:
-      securityContext:
-        enabled: false
-      podSecurityContext:
-        enabled: false
-      containerSecurityContext:
-        enabled: false
-      persistence:
-        enabled: true
-        mountPath: /var/lib/pgsql/data
-      extraEnvVars:
-        - name: POSTGRESQL_ADMIN_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: postgres-password
-              name: backstage-postgresql
+      username: bn_backstage
+      password: DDUF4iHeOaDh
+      database: postgres
+
+      # Admin user (superuser)
+      postgresUser: postgres
+      postgresPassword: DDUF4iHeOaDh
+
   service:
     ports:
-      backend: 4180
-      targetPort: oauth2-proxy
+      backend: 7007
+      targetPort: http-backend
 
 route:
   enabled: true
-  host: {{ ocp4_workload_redhat_developer_hub_backstage_host }}
+  host: backstage-backstage.apps.cluster-l9qz2.dynamic2.redhatworkshops.io
   tls:
     enabled: true
     termination: "edge"
+
+orchestrator:
+  enabled: true
+  serverlessLogicOperator:
+    enabled: true
+  serverlessOperator:
+    enabled: true
+  sonataflowPlatform:
+    monitoring:
+      enabled: true
+    eventing:
+      broker:
+        name: ""
+        namespace: ""
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "1Gi"
+        cpu: "500m"
+    # -- Secret name for the user-created secret to connect an external DB
+    externalDBsecretRef: ""
+    # -- Name for the user-configured external Database
+    externalDBName: ""
+    # -- Host for the user-configured external Database
+    externalDBHost: ""
+    # -- Port for the user-configured external Database
+    externalDBPort: ""
+    # -- Image for the init container used by the create-db job
+
+    initContainerImage: "{{ .Values.upstream.postgresql.image.registry }}/{{ .Values.upstream.postgresql.image.repository }}:{{ .Values.upstream.postgresql.image.tag }}"
+    # -- Image for the container used by the create-db job
+    createDBJobImage: "{{ .Values.upstream.postgresql.image.registry }}/{{ .Values.upstream.postgresql.image.repository }}:{{ .Values.upstream.postgresql.image.tag }}"
+  # -- Orchestrator plugins and their configuration
+  plugins: []
