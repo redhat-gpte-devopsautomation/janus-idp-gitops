@@ -239,6 +239,7 @@ upstream:
               clientSecret: ${GITLAB_CLIENT_SECRET}
               audience: http://gitlab.gitlab.svc.cluster.local
               callbackUrl: https://backstage-backstage.apps.cluster-l9qz2.dynamic2.redhatworkshops.io/api/auth/gitlab/handler/frame
+              baseUrl: http://gitlab.gitlab.svc.cluster.local
               signIn:
                 resolvers:
                   - resolver: emailMatchingUserEntityProfileEmail
