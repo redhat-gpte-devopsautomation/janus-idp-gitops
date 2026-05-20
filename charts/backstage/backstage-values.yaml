@@ -237,7 +237,7 @@ upstream:
             production:
               clientId: ${GITLAB_CLIENT_ID}
               clientSecret: ${GITLAB_CLIENT_SECRET}
-              audience: https://gitlab-gitlab.apps.cluster-l9qz2.dynamic2.redhatworkshops.io
+              audience: http://gitlab.gitlab.svc.cluster.local
               callbackUrl: https://backstage-backstage.apps.cluster-l9qz2.dynamic2.redhatworkshops.io/api/auth/gitlab/handler/frame
               signIn:
                 resolvers:
