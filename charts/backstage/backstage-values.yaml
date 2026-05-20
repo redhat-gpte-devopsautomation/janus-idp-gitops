@@ -360,7 +360,7 @@ upstream:
   service:
     ports:
       backend: 7007
-      targetPort: http-backend
+      targetPort: backend
 
 route:
   enabled: true
